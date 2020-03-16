@@ -29,6 +29,7 @@ RUN mkdir /jenkins-war && unzip /usr/share/jenkins/jenkins.war -d /jenkins-war &
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    python \
     ansible \
     sudo \
     wget \
