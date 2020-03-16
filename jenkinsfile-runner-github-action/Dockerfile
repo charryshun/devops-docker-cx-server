@@ -27,6 +27,20 @@ RUN curl -O https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/j
 RUN mkdir /jenkins-war && unzip /usr/share/jenkins/jenkins.war -d /jenkins-war && \
     mkdir -p /var/cx-server/jenkins-configuration
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ansible \
+    sudo \
+    apt-transport-https && \
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
+    apt-get update && \
+    apt-get install -y kubectl && \
+    wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz && \
+    tar xf kubeval-linux-amd64.tar.gz && \
+    cp kubeval /usr/local/bin && \
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
             "--plugins", "/usr/share/jenkins/ref/plugins", \
