@@ -41,7 +41,8 @@ RUN apt-get update && \
     wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz && \
     tar xf kubeval-linux-amd64.tar.gz && \
     cp kubeval /usr/local/bin && \
-    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
+    curl -sL https://ibm.biz/idt-installer | bash 
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
