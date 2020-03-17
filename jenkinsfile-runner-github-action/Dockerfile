@@ -38,6 +38,7 @@ RUN apt-get update && \
     python \
     ansible \
     sudo \
+    git \
     wget \
     apt-transport-https && \
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
@@ -48,10 +49,14 @@ RUN apt-get update && \
     tar xf kubeval-linux-amd64.tar.gz && \
     cp kubeval /usr/local/bin && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
-    curl -sL https://ibm.biz/idt-installer | bash && \
-    wget https://releases.hashicorp.com/terraform/${TERRAFORM_VER}/${TERRAFORM_ZIP} -O /tmp/${TERRAFORM_ZIP} && \
-    unzip /tmp/${TERRAFORM_ZIP} -d /usr/local/bin && \
-    rm /tmp/${TERRAFORM_ZIP}
+    curl -sL https://ibm.biz/idt-installer | bash
+
+RUN  mkdir -p ~/.terraform.d/plugins/linux_amd64
+    git clone https://github.com/tfutils/tfenv.git ~/.tfenv && \
+    ln -s ~/.tfenv/bin/* /usr/local/bin
+    /usr/local/bin/tfenv install 0.11.11
+    /usr/local/bin/tfenv install 0.12.13
+    echo 0.11.11 > ~/.terraform-version
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
