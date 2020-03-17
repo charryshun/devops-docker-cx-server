@@ -19,6 +19,9 @@ LABEL "maintainer"="SAP SE"
 # User needs to be root for access to mounted Docker socket
 # hadolint ignore=DL3002
 USER root
+ENV TERRAFORM_VER 0.11.1
+ENV TERRAFORM_ZIP terraform_${TERRAFORM_VER}_linux_amd64.zip
+
 COPY plugins.txt /usr/share/jenkins/ref/plugins1.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins1.txt
 
@@ -45,7 +48,10 @@ RUN apt-get update && \
     tar xf kubeval-linux-amd64.tar.gz && \
     cp kubeval /usr/local/bin && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
-    curl -sL https://ibm.biz/idt-installer | bash  
+    curl -sL https://ibm.biz/idt-installer | bash && \
+    wget https://releases.hashicorp.com/terraform/${TERRAFORM_VER}/${TERRAFORM_ZIP} -O /tmp/${TERRAFORM_ZIP} && \
+    unzip /tmp/${TERRAFORM_ZIP} -d /usr/local/bin && \
+    rm /tmp/${TERRAFORM_ZIP}
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
