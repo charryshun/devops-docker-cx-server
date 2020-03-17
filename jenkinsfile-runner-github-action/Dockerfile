@@ -56,7 +56,8 @@ RUN mkdir -p ~/.terraform.d/plugins/linux_amd64 && \
     ln -s ~/.tfenv/bin/* /usr/local/bin && \
     /usr/local/bin/tfenv install 0.11.11 && \
     /usr/local/bin/tfenv install 0.12.13 && \
-    echo 0.11.11 > ~/.terraform-version
+    echo 0.11.11 > ~/.terraform-version && \
+    echo 0.11.11 > ~/.tfenv/version
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
