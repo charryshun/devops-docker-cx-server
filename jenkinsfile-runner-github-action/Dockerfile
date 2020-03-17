@@ -19,6 +19,9 @@ LABEL "maintainer"="SAP SE"
 # User needs to be root for access to mounted Docker socket
 # hadolint ignore=DL3002
 USER root
+COPY plugins.txt /usr/share/jenkins/ref/plugins1.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins1.txt
+
 RUN curl -O https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/jenkinsfile-runner/$JENKINSFILE_RUNNER_VERSION/jenkinsfile-runner-$JENKINSFILE_RUNNER_VERSION-app.zip && \
     unzip jenkinsfile-runner-$JENKINSFILE_RUNNER_VERSION-app.zip -d jenkinsfile-runner && \
     rm jenkinsfile-runner-$JENKINSFILE_RUNNER_VERSION-app.zip && \
@@ -42,9 +45,7 @@ RUN apt-get update && \
     tar xf kubeval-linux-amd64.tar.gz && \
     cp kubeval /usr/local/bin && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
-    curl -sL https://ibm.biz/idt-installer | bash && \
-    COPY plugins.txt /usr/share/jenkins/ref/plugins1.txt && \
-    /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins1.txt
+    curl -sL https://ibm.biz/idt-installer | bash  
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
             "--jenkins-war", "/jenkins-war", \
