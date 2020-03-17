@@ -51,11 +51,11 @@ RUN apt-get update && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
     curl -sL https://ibm.biz/idt-installer | bash
 
-RUN  mkdir -p ~/.terraform.d/plugins/linux_amd64
+RUN mkdir -p ~/.terraform.d/plugins/linux_amd64 && \
     git clone https://github.com/tfutils/tfenv.git ~/.tfenv && \
-    ln -s ~/.tfenv/bin/* /usr/local/bin
-    /usr/local/bin/tfenv install 0.11.11
-    /usr/local/bin/tfenv install 0.12.13
+    ln -s ~/.tfenv/bin/* /usr/local/bin && \
+    /usr/local/bin/tfenv install 0.11.11 && \
+    /usr/local/bin/tfenv install 0.12.13 && \
     echo 0.11.11 > ~/.terraform-version
 
 ENTRYPOINT ["/jenkinsfile-runner/bin/jenkinsfile-runner", \
